@@ -1,12 +1,9 @@
 <template>
   <div class="home-menu-container">
-    <h1>Battleships The Game</h1>
-    <h3>by: Oskar Kacprzak</h3>
-    <a href="https://github.com/Oskarowski" target="_blank" rel="noopener"
-      >GitHub</a
-    >
-    <div>
-      <button @click="playBtnClicked" class="btn">PLAY</button>
+    <h1>Battleship The Game</h1>
+    <div class="btns-container">
+      <button @click="playBtnClicked" class="btn">Play</button>
+      <button @click="authorBtnClicked" class="btn">Author</button>
     </div>
   </div>
 </template>
@@ -16,6 +13,10 @@ export default {
   methods: {
     playBtnClicked: function () {
       this.$emit("play-btn-clicked");
+    },
+
+    authorBtnClicked: function () {
+      this.$emit("author-btn-clicked");
     },
   },
 };
@@ -29,18 +30,26 @@ export default {
   text-align: center;
   color: #2c3e50;
 
-  display: flexbox;
   cursor: default;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
 }
-
 .btn {
-  padding: 1rem;
+  padding: 2rem;
   background-color: green;
-  font-size: 1rem;
-  border-radius: 2em;
+  font-size: 2em;
+  border-radius: 1em;
   border: 0;
   margin: 1rem;
   color: white;
+}
+.btns-container {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 .btn:hover {
   opacity: 0.9;

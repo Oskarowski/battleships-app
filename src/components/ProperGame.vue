@@ -1,6 +1,10 @@
 <template>
   <div class="game-container">
-    <BattlefieldMap></BattlefieldMap>
+    <hr />
+    <div class="proper-board">
+      <BattlefieldMap></BattlefieldMap>
+    </div>
+    <hr />
   </div>
 </template>
 
@@ -25,8 +29,22 @@ export default {
 
   padding: 0;
   margin: 0;
+}
 
+.proper-board {
   display: flex;
   justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+hr {
+  display: block;
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 2px;
 }
 </style>

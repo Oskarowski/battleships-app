@@ -41,13 +41,18 @@ export default {
   border: 1px solid black;
   margin: 1px;
   aspect-ratio: 1/1;
+  box-sizing: border-box;
 }
 .field-marked {
   background-color: aquamarine;
 }
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    opacity: 0.9;
+    background-color: bisque;
 
-button:hover {
-  opacity: 0.9;
-  background-color: bisque;
+    border: 1px solid bisque;
+    transition: opacity 0.2s, background-color 0.2s;
+  }
 }
 </style>

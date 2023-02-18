@@ -41,8 +41,14 @@ export default {
 
 <style>
 .battlefield-map {
-  height: 600px;
-  width: 600px;
+  height: 100%;
+  width: 100%;
+
+  max-width: min-content;
+
+  margin-left: 1vw;
+  margin-right: 1vw;
+
   display: grid;
   grid-template-rows: repeat(10, auto);
   grid-template-columns: repeat(10, auto);
