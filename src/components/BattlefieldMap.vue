@@ -4,6 +4,10 @@
       :key="field"
       v-for="field in allFieldsCollection"
       :fieldParams="field"
+      @field-clicked="fieldClicked"
+      :isFieldMiss="field.isFieldMiss"
+      :isFieldHit="field.isFieldHit"
+      :isFieldSunk="field.isFieldSunk"
     ></SingleField>
   </div>
 </template>
@@ -28,11 +32,21 @@ export default {
   },
 
   methods: {
+    fieldClicked: function (fieldParams) {
+      console.log("fieldClicked: ", fieldParams);
+    },
     generateAllMapFields: function () {
-      for (var i = 0; i < 100; i++) {
-        this.allFieldsCollection.push({
-          frontID: i,
-        });
+      for (var i = 0; i < 10; i++) {
+        for (var j = 0; j < 10; j++) {
+          this.allFieldsCollection.push({
+            fieldRow: i,
+            fieldColumn: j,
+            frontID: `${i}, ${j}`,
+            isFieldMiss: false,
+            isFieldHit: false,
+            isFieldSunk: false,
+          });
+        }
       }
     },
   },
@@ -44,10 +58,16 @@ export default {
   height: 100%;
   width: 100%;
 
-  max-width: min-content;
+  max-height: max-content;
+  max-width: max-content;
+  min-height: min-content;
+  min-width: min-content;
 
   margin-left: 1vw;
   margin-right: 1vw;
+
+  border: 0.1rem solid darkblue;
+  border-radius: 0.2rem;
 
   display: grid;
   grid-template-rows: repeat(10, auto);

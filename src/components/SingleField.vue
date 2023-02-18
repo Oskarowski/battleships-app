@@ -1,6 +1,6 @@
 <template>
   <button
-    v-on:click="btnClicked"
+    v-on:click="fieldClicked()"
     :class="{ 'single-field': true, 'field-marked': isFieldMarked }"
   >
     {{ fieldParams.frontID }}
@@ -18,17 +18,22 @@ export default {
   },
   props: {
     fieldParams: null,
+    isFieldMiss: null,
+    isFieldHit: null,
+    isFieldSunk: null,
   },
 
   mounted() {},
 
   methods: {
-    btnClicked: function () {
-      console.log("btnClicked: ", this.fieldParams.frontID);
+    fieldClicked: function () {
       this.isFieldMarked = !this.isFieldMarked;
-      // this.$emit("fieldClicked", {
-      //   frontID: this.frontID,
-      // });
+
+      this.$emit("field-clicked", {
+        isFieldMarked: this.isFieldMarked,
+        fieldRow: this.fieldParams.fieldRow,
+        fieldColumn: this.fieldParams.fieldColumn,
+      });
     },
   },
 };
@@ -36,12 +41,19 @@ export default {
 
 <style scoped>
 .single-field {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+
   max-height: 100%;
   max-width: 100%;
+
+  min-width: min-content;
+  min-width: min-content;
+
   border: 1px solid black;
-  margin: 1px;
-  aspect-ratio: 1/1;
   box-sizing: border-box;
+  text-align: center;
 }
 .field-marked {
   background-color: aquamarine;
@@ -50,8 +62,7 @@ export default {
   button:hover {
     opacity: 0.9;
     background-color: bisque;
-
-    border: 1px solid bisque;
+    border-color: bisque;
     transition: opacity 0.2s, background-color 0.2s;
   }
 }

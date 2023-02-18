@@ -5,16 +5,23 @@
       <BattlefieldMap></BattlefieldMap>
     </div>
     <hr />
+    <ShipyardComponent
+      ref="shipyardComponent"
+      @all-ships-picked="allShipsPicked($event)"
+    ></ShipyardComponent>
+    <hr />
   </div>
 </template>
 
 <script>
 import BattlefieldMap from "./BattlefieldMap.vue";
+import ShipyardComponent from "./ShipyardComponent.vue";
 
 export default {
   name: "ProperGame",
   components: {
     BattlefieldMap,
+    ShipyardComponent,
   },
 };
 </script>
