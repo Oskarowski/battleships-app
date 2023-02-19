@@ -1,9 +1,10 @@
 <template>
   <button
+    :disabled="block"
     v-on:click="fieldClicked()"
-    :class="{ 'single-field': true, 'field-marked': isFieldMarked }"
+    :class="{ 'single-field': true, 'field-marked': isMarked }"
   >
-    {{ fieldParams.frontID }}
+    {{ fieldElement.frontID }}
   </button>
 </template>
 
@@ -13,26 +14,27 @@ export default {
   data: function () {
     return {
       fieldID: v4(),
-      isFieldMarked: false,
+      isMarked: false,
     };
   },
   props: {
-    fieldParams: null,
+    fieldElement: null,
     isFieldMiss: null,
     isFieldHit: null,
     isFieldSunk: null,
+    block: null,
   },
 
   mounted() {},
 
   methods: {
     fieldClicked: function () {
-      this.isFieldMarked = !this.isFieldMarked;
+      this.isMarked = !this.isMarked;
 
       this.$emit("field-clicked", {
-        isFieldMarked: this.isFieldMarked,
-        fieldRow: this.fieldParams.fieldRow,
-        fieldColumn: this.fieldParams.fieldColumn,
+        isMarked: this.isMarked,
+        fieldRow: this.fieldElement.fieldRow,
+        fieldColumn: this.fieldElement.fieldColumn,
       });
     },
   },
