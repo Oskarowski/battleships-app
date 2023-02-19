@@ -2,7 +2,11 @@
   <div class="game-container">
     <hr />
     <div class="proper-board">
-      <BattlefieldMap></BattlefieldMap>
+      <BattlefieldMap
+        ref="battlefield"
+        @field-clicked="fieldClicked"
+        :blockPicking="blockPicking"
+      ></BattlefieldMap>
     </div>
     <hr />
     <ShipyardComponent
@@ -22,6 +26,22 @@ export default {
   components: {
     BattlefieldMap,
     ShipyardComponent,
+  },
+
+  data: function () {
+    return {
+      playerName: "Oskar",
+      blockPicking: false,
+    };
+  },
+  methods: {
+    fieldClicked: function (fieldElement) {
+      // console.log("PG: fieldClicked: ", fieldElement);
+      this.$refs.shipyardComponent.fieldClicked(fieldElement);
+    },
+    allShipsPicked: function (shipsPickedData) {
+      console.log("PG: allShipsArray: ", shipsPickedData);
+    },
   },
 };
 </script>
