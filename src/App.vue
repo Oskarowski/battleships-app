@@ -20,8 +20,8 @@ export default {
   name: "App",
   data: function () {
     return {
-      isMomeMenuState: true,
-      isGameState: false,
+      isMomeMenuState: false,
+      isGameState: true,
       isAboutAuthorState: false,
     };
   },
@@ -33,19 +33,19 @@ export default {
 
   methods: {
     playBtnClicked: function () {
-      console.log("APP: playBtnClicked");
+      // console.log("APP: playBtnClicked");
       this.isMomeMenuState = false;
       this.isAboutAuthorState = false;
       this.isGameState = true;
     },
     authorBtnClicked: function () {
-      console.log("APP: authorBtnClicked");
+      // console.log("APP: authorBtnClicked");
       this.isMomeMenuState = false;
       this.isAboutAuthorState = true;
       this.isGameState = false;
     },
     goBackBtnClicked: function () {
-      console.log("APP: goBackBtnClicked");
+      // console.log("APP: goBackBtnClicked");
       this.isMomeMenuState = true;
       this.isAboutAuthorState = false;
       this.isGameState = false;
