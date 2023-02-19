@@ -3,11 +3,12 @@
     <SingleField
       :key="field"
       v-for="field in allFieldsCollection"
-      :fieldParams="field"
+      :fieldElement="field"
       @field-clicked="fieldClicked"
       :isFieldMiss="field.isFieldMiss"
       :isFieldHit="field.isFieldHit"
       :isFieldSunk="field.isFieldSunk"
+      :block="blockPicking"
     ></SingleField>
   </div>
 </template>
@@ -27,13 +28,17 @@ export default {
     };
   },
 
+  props: {
+    blockPicking: null,
+  },
+
   mounted() {
     this.generateAllMapFields();
   },
 
   methods: {
-    fieldClicked: function (fieldParams) {
-      console.log("fieldClicked: ", fieldParams);
+    fieldClicked: function (fieldElement) {
+      this.$emit("field-clicked", fieldElement);
     },
     generateAllMapFields: function () {
       for (var i = 0; i < 10; i++) {
