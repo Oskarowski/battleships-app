@@ -68,6 +68,8 @@ export default {
         return this.$emit("all-ships-picked", this.allShips);
       }
       if (currentShip.length == shipArray.length) {
+        console.log(shipArray);
+        this.$emit("ship-picked", shipArray);
         currentShip.state = "alreadyPickedShip";
         currentShip.pickedNodes = shipArray;
         this.markedFields = [];
