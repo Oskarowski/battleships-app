@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <label>{{ mySlotIndex }}</label>
+    <label> {{ mySlotIndex }} </label>
     <hr />
     <div class="proper-board">
       <BattlefieldMap
@@ -37,26 +37,45 @@ export default {
       playerName: "Oskar",
       socket: null,
       mySlotIndex: undefined,
-      myPickedFields: null,
+      myPickedFields: [],
+      gameIsOn: false,
       blockPicking: false,
     };
   },
 
   mounted: function () {
-    this.socket = io("192.168.1.123:8082");
-    this.socket.on("yourID", (id) => (this.mySlotIndex = id));
+    this.socket = io("http://192.168.1.123:8082");
+    this.socket.on("yourID", (id) => {
+      console.log(id);
+      this.mySlotIndex = id;
+    });
     this.socket.on("playerReady", function () {
       Swal.fire({ toast: true, position: "top-end", title: "Player ready" });
+    });
+
+    this.socket.on("connect", function () {
+      Swal.fire({ toast: true, text: "Connection established" });
+    });
+
+    this.socket.on("disconnect", function () {
+      console.log("Disconnected from server");
     });
   },
 
   methods: {
     fieldClicked: function (fieldElement) {
-      // console.log("PG: fieldClicked: ", fieldElement);
-      this.$refs.shipyardComponent.fieldClicked(fieldElement);
+      if (this.gameIsOn) {
+        this.socket.emit("shoot", { fieldElement: fieldElement });
+      } else {
+        this.socket.emit("fieldClicked", fieldElement);
+        this.$refs.shipyardComponent.fieldClicked(fieldElement);
+      }
     },
     allShipsPicked: function (shipsPickedData) {
-      console.log("PG: allShipsArray: ", shipsPickedData);
+      shipsPickedData.forEach((ship) => {
+        this.myPickedFields.push(...ship.pickedNodes);
+      });
+      this.socket.emit("allShipsPicked", shipsPickedData);
     },
   },
 };
