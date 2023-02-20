@@ -1,5 +1,6 @@
 <template>
   <div class="game-container">
+    <label>{{ mySlotIndex }}</label>
     <hr />
     <div class="proper-board">
       <BattlefieldMap
@@ -20,6 +21,9 @@
 <script>
 import BattlefieldMap from "./BattlefieldMap.vue";
 import ShipyardComponent from "./ShipyardComponent.vue";
+import { io } from "socket.io-client";
+
+import Swal from "sweetalert2";
 
 export default {
   name: "ProperGame",
@@ -31,9 +35,21 @@ export default {
   data: function () {
     return {
       playerName: "Oskar",
+      socket: null,
+      mySlotIndex: undefined,
+      myPickedFields: null,
       blockPicking: false,
     };
   },
+
+  mounted: function () {
+    this.socket = io("192.168.1.123:8082");
+    this.socket.on("yourID", (id) => (this.mySlotIndex = id));
+    this.socket.on("playerReady", function () {
+      Swal.fire({ toast: true, position: "top-end", title: "Player ready" });
+    });
+  },
+
   methods: {
     fieldClicked: function (fieldElement) {
       // console.log("PG: fieldClicked: ", fieldElement);
