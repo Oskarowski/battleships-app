@@ -50,7 +50,6 @@ export default {
             isFieldMiss: false,
             isFieldHit: false,
             isFieldSunk: false,
-            isFieldBlocked: false,
           });
         }
       }
