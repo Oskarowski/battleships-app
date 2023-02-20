@@ -1,10 +1,10 @@
 <template>
   <div class="battlefield-map">
     <SingleField
+      @field-clicked="fieldClicked"
       :key="field"
       v-for="field in allFieldsCollection"
       :fieldElement="field"
-      @field-clicked="fieldClicked"
       :isFieldMiss="field.isFieldMiss"
       :isFieldHit="field.isFieldHit"
       :isFieldSunk="field.isFieldSunk"
@@ -50,6 +50,7 @@ export default {
             isFieldMiss: false,
             isFieldHit: false,
             isFieldSunk: false,
+            isFieldBlocked: false,
           });
         }
       }
