@@ -1,6 +1,6 @@
 <template>
   <button
-    :disabled="block"
+    :disabled="isFieldBlocked"
     v-on:click="fieldClicked()"
     :class="{ 'single-field': true, 'field-marked': isMarked }"
   >
@@ -22,10 +22,14 @@ export default {
     isFieldMiss: null,
     isFieldHit: null,
     isFieldSunk: null,
-    block: null,
+    isFieldBlocked: null,
   },
 
-  mounted() {},
+  mounted() {
+    if (this.fieldElement.isMarked) {
+      this.isMarked = true;
+    }
+  },
 
   methods: {
     fieldClicked: function () {
