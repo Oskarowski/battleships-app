@@ -8,7 +8,7 @@
       :isFieldMiss="field.isFieldMiss"
       :isFieldHit="field.isFieldHit"
       :isFieldSunk="field.isFieldSunk"
-      :block="blockPicking"
+      :isFieldBlocked="blockPicking"
     ></SingleField>
   </div>
 </template>
@@ -30,9 +30,12 @@ export default {
 
   props: {
     blockPicking: null,
+    drawFieldsPickedByPlayer: null,
   },
 
   mounted() {
+    console.log(this.drawFieldsPickedByPlayer);
+
     this.generateAllMapFields();
   },
 
@@ -40,12 +43,21 @@ export default {
     fieldClicked: function (fieldElement) {
       this.$emit("field-clicked", fieldElement);
     },
+
     generateAllMapFields: function () {
       for (var i = 0; i < 10; i++) {
         for (var j = 0; j < 10; j++) {
+          var overridedField;
+          if (this.drawFieldsPickedByPlayer) {
+            overridedField = this.drawFieldsPickedByPlayer.find((element) => {
+              return element.fieldRow == i && element.fieldColumn == j;
+            });
+          }
+
           this.allFieldsCollection.push({
             fieldRow: i,
             fieldColumn: j,
+            isMarked: overridedField ? true : false,
             frontID: `${i}, ${j}`,
             isFieldMiss: false,
             isFieldHit: false,
