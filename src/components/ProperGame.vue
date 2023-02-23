@@ -2,9 +2,10 @@
   <div class="game-container">
     <label> {{ mySlotIndex }} </label>
     <hr />
-    <div class="proper-board">
+    <div class="all-fields-board">
       <BattlefieldMap
-        ref="battlefield"
+        v-if="displayMainBoard"
+        ref="proper-battlefield"
         @field-clicked="fieldClicked"
         :blockPicking="blockPicking"
       ></BattlefieldMap>
@@ -15,6 +16,14 @@
       @all-ships-picked="allShipsPicked($event)"
     ></ShipyardComponent>
     <hr />
+    <div class="all-my-picked-fields">
+      <BattlefieldMap
+        v-if="theGameIsOn"
+        ref="referal-battlefield"
+        :blockPicking="true"
+        :drawFieldsPickedByPlayer="myPickedFields"
+      ></BattlefieldMap>
+    </div>
   </div>
 </template>
 
@@ -38,8 +47,11 @@ export default {
       socket: null,
       mySlotIndex: undefined,
       myPickedFields: [],
-      gameIsOn: false,
       blockPicking: false,
+      displayMainBoard: true,
+      theGameIsOn: false,
+      playerLost: false,
+      playerWon: false,
     };
   },
 
@@ -49,8 +61,24 @@ export default {
       console.log(id);
       this.mySlotIndex = id;
     });
-    this.socket.on("playerReady", function () {
-      Swal.fire({ toast: true, position: "top-end", title: "Player ready" });
+    this.socket.on("opponentIsReady", function () {
+      Swal.fire({
+        toast: true,
+        position: "top-end",
+        title: "Opponent already placed ships",
+      });
+    });
+
+    this.socket.on("blockClickingOnBoard", () => {
+      this.blockPicking = true;
+    });
+
+    this.socket.on("theGameIsOn", () => {
+      this.theGameIsOn = true;
+      this.displayMainBoard = false;
+      this.$nextTick(() => {
+        this.displayMainBoard = true;
+      });
     });
 
     this.socket.on("connect", function () {
@@ -93,7 +121,16 @@ export default {
   margin: 0;
 }
 
-.proper-board {
+.all-my-picked-fields {
+  /* background-color: red; */
+  width: 50%;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+.all-fields-board {
   display: flex;
   justify-content: center;
   align-content: center;
