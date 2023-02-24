@@ -66,6 +66,15 @@ export default {
         }
       }
     },
+
+    fieldHitByPlayer: function (fieldElement) {
+      console.log(fieldElement);
+      this.allFieldsCollection.find(
+        (call) =>
+          call.fieldRow == fieldElement.fieldRow &&
+          call.fieldColumn == fieldElement.fieldColumn
+      ).isFieldHit = true;
+    },
   },
 };
 </script>
