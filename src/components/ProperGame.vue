@@ -1,11 +1,12 @@
 <template>
   <div class="game-container">
     <label> {{ mySlotIndex }} </label>
+    <p>theGameIsOn: {{ theGameIsOn }}</p>
     <hr />
     <div class="all-fields-board">
       <BattlefieldMap
         v-if="displayMainBoard"
-        ref="proper-battlefield"
+        ref="proper_battlefield"
         @field-clicked="fieldClicked"
         :blockPicking="blockPicking"
       ></BattlefieldMap>
@@ -13,13 +14,13 @@
     <hr />
     <ShipyardComponent
       ref="shipyardComponent"
-      @all-ships-picked="allShipsPicked($event)"
+      v-on:all-ships-picked="allShipsPicked($event)"
     ></ShipyardComponent>
     <hr />
     <div class="all-my-picked-fields">
       <BattlefieldMap
         v-if="theGameIsOn"
-        ref="referal-battlefield"
+        ref="referal_battlefield"
         :blockPicking="true"
         :drawFieldsPickedByPlayer="myPickedFields"
       ></BattlefieldMap>
@@ -72,13 +73,33 @@ export default {
     this.socket.on("blockClickingOnBoard", () => {
       this.blockPicking = true;
     });
+    this.socket.on("yourTurn", () => {
+      this.blockPicking = false;
+    });
 
     this.socket.on("theGameIsOn", () => {
       this.theGameIsOn = true;
       this.displayMainBoard = false;
       this.$nextTick(() => {
+        this.theGameIsOn = true;
         this.displayMainBoard = true;
       });
+    });
+
+    this.socket.on("shotHit", (data) => {
+      var fieldElement = data.fieldElement;
+      Swal.fire({
+        toast: true,
+        title: "Ship hit 🔥",
+        showConfirmButton: false,
+        position: "top-right",
+        timer: 1000,
+      });
+      if (data.shotHitBy === this.mySlotIndex) {
+        this.$refs.proper_battlefield.fieldHitByPlayer(fieldElement);
+      } else if (data.shotHitBy !== undefined) {
+        this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
+      }
     });
 
     this.socket.on("connect", function () {
@@ -92,8 +113,9 @@ export default {
 
   methods: {
     fieldClicked: function (fieldElement) {
-      if (this.gameIsOn) {
-        this.socket.emit("shoot", { fieldElement: fieldElement });
+      if (this.theGameIsOn) {
+        this.socket.emit("shotFired", { fieldElement: fieldElement });
+        console.log("Shot fired");
       } else {
         this.socket.emit("fieldClicked", fieldElement);
         this.$refs.shipyardComponent.fieldClicked(fieldElement);
