@@ -2,7 +2,11 @@
   <button
     :disabled="isFieldBlocked"
     v-on:click="fieldClicked()"
-    :class="{ 'single-field': true, 'field-marked': isMarked }"
+    :class="{
+      'single-field': true,
+      'field-marked': isMarked,
+      'field-hit': isFieldHit,
+    }"
   >
     {{ fieldElement.frontID }}
   </button>
@@ -64,6 +68,10 @@ export default {
 .field-marked {
   background-color: aquamarine;
 }
+.field-hit {
+  background-color: rgb(148, 0, 0);
+}
+
 @media (hover: hover) and (pointer: fine) {
   button:hover {
     opacity: 0.9;
