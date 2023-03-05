@@ -68,12 +68,28 @@ export default {
     },
 
     fieldHitByPlayer: function (fieldElement) {
-      console.log(fieldElement);
+      // console.log(fieldElement);
       this.allFieldsCollection.find(
-        (call) =>
-          call.fieldRow == fieldElement.fieldRow &&
-          call.fieldColumn == fieldElement.fieldColumn
+        (cell) =>
+          cell.fieldRow == fieldElement.fieldRow &&
+          cell.fieldColumn == fieldElement.fieldColumn
       ).isFieldHit = true;
+    },
+
+    shotMissedByPlayer: function (fieldElement) {
+      this.allFieldsCollection.find(
+        (cell) =>
+          cell.fieldRow == fieldElement.fieldRow &&
+          cell.fieldColumn == fieldElement.fieldColumn
+      ).isFieldMissed = true;
+    },
+
+    shipSunkByPlayer: function (fieldElement) {
+      this.allFieldsCollection.find(
+        (cell) =>
+          cell.fieldRow == fieldElement.fieldRow &&
+          cell.fieldColumn == fieldElement.fieldColumn
+      ).isFieldSunk = true;
     },
   },
 };
