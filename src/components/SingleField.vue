@@ -23,7 +23,7 @@ export default {
   },
   props: {
     fieldElement: null,
-    isFieldMiss: null,
+    isFieldMissed: null,
     isFieldHit: null,
     isFieldSunk: null,
     isFieldBlocked: null,
