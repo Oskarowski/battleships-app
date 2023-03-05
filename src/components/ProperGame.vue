@@ -1,29 +1,34 @@
 <template>
   <div class="game-container">
-    <label> {{ mySlotIndex }} </label>
-    <p>theGameIsOn: {{ theGameIsOn }}</p>
-    <hr />
-    <div class="all-fields-board">
-      <BattlefieldMap
-        v-if="displayMainBoard"
-        ref="proper_battlefield"
-        @field-clicked="fieldClicked"
-        :blockPicking="blockPicking"
-      ></BattlefieldMap>
+    <div v-if="isPreEndGame">
+      <label> {{ mySlotIndex }} </label>
+      <p>theGameIsOn: {{ theGameIsOn }}</p>
+      <hr />
+      <div class="all-fields-board">
+        <BattlefieldMap
+          v-if="displayMainBoard"
+          ref="proper_battlefield"
+          @field-clicked="fieldClicked"
+          :blockPicking="blockPicking"
+        ></BattlefieldMap>
+      </div>
+      <hr />
+      <ShipyardComponent
+        ref="shipyardComponent"
+        v-on:all-ships-picked="allShipsPicked($event)"
+      ></ShipyardComponent>
+      <hr />
+      <div class="all-my-picked-fields">
+        <BattlefieldMap
+          v-if="theGameIsOn"
+          ref="referal_battlefield"
+          :blockPicking="true"
+          :drawFieldsPickedByPlayer="myPickedFields"
+        ></BattlefieldMap>
+      </div>
     </div>
-    <hr />
-    <ShipyardComponent
-      ref="shipyardComponent"
-      v-on:all-ships-picked="allShipsPicked($event)"
-    ></ShipyardComponent>
-    <hr />
-    <div class="all-my-picked-fields">
-      <BattlefieldMap
-        v-if="theGameIsOn"
-        ref="referal_battlefield"
-        :blockPicking="true"
-        :drawFieldsPickedByPlayer="myPickedFields"
-      ></BattlefieldMap>
+    <div v-if="showEndGameScreen">
+      <EndGameComponent> </EndGameComponent>
     </div>
   </div>
 </template>
@@ -31,6 +36,7 @@
 <script>
 import BattlefieldMap from "./BattlefieldMap.vue";
 import ShipyardComponent from "./ShipyardComponent.vue";
+import EndGameComponent from "./EndGameComponent.vue";
 import { io } from "socket.io-client";
 
 import Swal from "sweetalert2";
@@ -40,6 +46,7 @@ export default {
   components: {
     BattlefieldMap,
     ShipyardComponent,
+    EndGameComponent,
   },
 
   data: function () {
@@ -53,11 +60,13 @@ export default {
       theGameIsOn: false,
       playerLost: false,
       playerWon: false,
+      isPreEndGame: true,
+      showEndGameScreen: false,
     };
   },
 
   mounted: function () {
-    this.socket = io("http://192.168.1.123:8082");
+    this.socket = io("http://192.168.1.119:8082");
     this.socket.on("yourID", (id) => {
       console.log(id);
       this.mySlotIndex = id;
@@ -100,6 +109,70 @@ export default {
       } else if (data.shotHitBy !== undefined) {
         this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
       }
+    });
+
+    this.socket.on("shotMissed", ({ fieldElement, missedBy }) => {
+      Swal.fire({
+        toast: true,
+        title: "Missed",
+        showConfirmButton: false,
+        position: "top",
+        timer: 1000,
+      });
+
+      if (missedBy === this.mySlotIndex) {
+        this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
+      } else if (missedBy === undefined) {
+        this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
+      }
+    });
+
+    this.socket.on("hitAndSunk", ({ hitBy, ship }) => {
+      Swal.fire({
+        title: "Ship sunk",
+        text: `Player ${hitBy} sunk opponents ${ship.id}`,
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      ship.pickedNodes.forEach((node) => {
+        if (hitBy === this.mySlotIndex) {
+          this.$refs.proper_battlefield.shipSunkByPlayer(node);
+        } else if (hitBy === undefined) {
+          this.$refs.referal_battlefield.shipSunkByPlayer(node);
+        }
+      });
+    });
+
+    this.socket.on("theGameIsOver", () => {
+      Swal.fire({
+        title: "THE GAME IS OVER",
+        showConfirmButton: true,
+        timer: 1500,
+      });
+      this.blockPicking = true;
+      this.isPreEndGame = false;
+      this.showEndGameScreen = true;
+    });
+
+    this.socket.on("youWin", () => {
+      this.playerWon = true;
+      Swal.fire({
+        title: "YOU WON 🔥",
+        position: "top",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    });
+
+    this.socket.on("youLoose", () => {
+      this.playerLost = true;
+      Swal.fire({
+        title: "YOU LOST 😵",
+        position: "top",
+        showConfirmButton: false,
+        timer: 2500,
+      });
     });
 
     this.socket.on("connect", function () {
