@@ -5,7 +5,7 @@
       :key="field"
       v-for="field in allFieldsCollection"
       :fieldElement="field"
-      :isFieldMiss="field.isFieldMiss"
+      :isFieldMissed="field.isFieldMissed"
       :isFieldHit="field.isFieldHit"
       :isFieldSunk="field.isFieldSunk"
       :isFieldBlocked="blockPicking"
@@ -59,7 +59,7 @@ export default {
             fieldColumn: j,
             isMarked: overridedField ? true : false,
             frontID: `${i}, ${j}`,
-            isFieldMiss: false,
+            isFieldMissed: false,
             isFieldHit: false,
             isFieldSunk: false,
           });
