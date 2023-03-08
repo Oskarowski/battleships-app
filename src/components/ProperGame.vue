@@ -66,7 +66,7 @@ export default {
   },
 
   mounted: function () {
-    this.socket = io("http://192.168.1.119:8082");
+    this.socket = io("http://192.168.1.121:8082");
     this.socket.on("yourID", (id) => {
       console.log(id);
       this.mySlotIndex = id;
@@ -122,7 +122,7 @@ export default {
 
       if (missedBy === this.mySlotIndex) {
         this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
-      } else if (missedBy === undefined) {
+      } else if (missedBy !== undefined) {
         this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
       }
     });
@@ -138,7 +138,7 @@ export default {
       ship.pickedNodes.forEach((node) => {
         if (hitBy === this.mySlotIndex) {
           this.$refs.proper_battlefield.shipSunkByPlayer(node);
-        } else if (hitBy === undefined) {
+        } else if (hitBy !== undefined) {
           this.$refs.referal_battlefield.shipSunkByPlayer(node);
         }
       });
