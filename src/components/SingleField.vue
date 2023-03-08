@@ -6,6 +6,8 @@
       'single-field': true,
       'field-marked': isMarked,
       'field-hit': isFieldHit,
+      'field-sunk': isFieldSunk,
+      'field-missed': isFieldMissed,
     }"
   >
     {{ fieldElement.frontID }}
@@ -79,5 +81,12 @@ export default {
     border-color: bisque;
     transition: opacity 0.2s, background-color 0.2s;
   }
+}
+.field-missed {
+  background-color: gray;
+}
+
+.field-sunk {
+  background-color: black;
 }
 </style>
