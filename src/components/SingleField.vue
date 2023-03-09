@@ -10,7 +10,7 @@
       'field-missed': isFieldMissed,
     }"
   >
-    {{ fieldElement.frontID }}
+    <!-- {{ fieldElement.frontID }} -->
   </button>
 </template>
 
@@ -75,7 +75,7 @@ export default {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  button:hover {
+  button:not(:disabled):hover {
     opacity: 0.9;
     background-color: bisque;
     border-color: bisque;
