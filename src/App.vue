@@ -1,4 +1,10 @@
 <template>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap"
+    rel="stylesheet"
+  />
   <HomeMenu
     v-if="isMomeMenuState"
     @play-btn-clicked="playBtnClicked"
@@ -20,8 +26,8 @@ export default {
   name: "App",
   data: function () {
     return {
-      isMomeMenuState: false,
-      isGameState: true,
+      isMomeMenuState: true,
+      isGameState: false,
       isAboutAuthorState: false,
     };
   },
@@ -58,9 +64,13 @@ export default {
 body {
   margin: 0;
   padding: 0;
+  font-family: "Press Start 2P", cursive;
+}
+button {
+  font-family: "Press Start 2P", cursive;
 }
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Press Start 2P";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
