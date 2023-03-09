@@ -1,15 +1,18 @@
 <template>
-  <div class="battlefield-map">
-    <SingleField
-      @field-clicked="fieldClicked"
-      :key="field"
-      v-for="field in allFieldsCollection"
-      :fieldElement="field"
-      :isFieldMissed="field.isFieldMissed"
-      :isFieldHit="field.isFieldHit"
-      :isFieldSunk="field.isFieldSunk"
-      :isFieldBlocked="blockPicking"
-    ></SingleField>
+  <div>
+    <p>{{ textToDisplayAbove }}</p>
+    <div class="battlefield-map">
+      <SingleField
+        @field-clicked="fieldClicked"
+        :key="field"
+        v-for="field in allFieldsCollection"
+        :fieldElement="field"
+        :isFieldMissed="field.isFieldMissed"
+        :isFieldHit="field.isFieldHit"
+        :isFieldSunk="field.isFieldSunk"
+        :isFieldBlocked="blockPicking"
+      ></SingleField>
+    </div>
   </div>
 </template>
 
@@ -31,10 +34,11 @@ export default {
   props: {
     blockPicking: null,
     drawFieldsPickedByPlayer: null,
+    textToDisplayAbove: null,
   },
 
   mounted() {
-    console.log(this.drawFieldsPickedByPlayer);
+    // console.log(this.drawFieldsPickedByPlayer);
 
     this.generateAllMapFields();
   },
@@ -97,13 +101,7 @@ export default {
 
 <style>
 .battlefield-map {
-  height: 100%;
-  width: 100%;
-
-  max-height: max-content;
-  max-width: max-content;
-  min-height: min-content;
-  min-width: min-content;
+  height: 40vh;
 
   margin-left: 1vw;
   margin-right: 1vw;
