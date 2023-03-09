@@ -23,12 +23,17 @@ export default {
 </script>
 
 <style scoped>
+h1 {
+  font-family: "Press Start 2P";
+  font-size: 4vw;
+}
 .home-menu-container {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  margin-top: 5vh;
 
   cursor: default;
   display: flex;
@@ -36,12 +41,12 @@ export default {
   flex-direction: column;
 }
 .btn {
-  padding: 2rem;
+  padding: 4%;
   background-color: green;
-  font-size: 2em;
+  font-size: 3vw;
   border-radius: 1em;
   border: 0;
-  margin: 1rem;
+  margin: 0.5em;
   color: white;
 }
 .btns-container {
