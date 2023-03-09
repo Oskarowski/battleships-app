@@ -1,14 +1,15 @@
 <template>
   <div class="game-container">
     <div v-if="isPreEndGame">
-      <label> {{ mySlotIndex }} </label>
-      <p>theGameIsOn: {{ theGameIsOn }}</p>
+      <label> {{ playerName }} </label>
+      <!-- <p>theGameIsOn: {{ theGameIsOn }}</p> -->
       <hr />
       <div class="all-fields-board">
         <BattlefieldMap
           v-if="displayMainBoard"
           ref="proper_battlefield"
           @field-clicked="fieldClicked"
+          :textToDisplayAbove="'The Battlefield:'"
           :blockPicking="blockPicking"
         ></BattlefieldMap>
       </div>
@@ -24,6 +25,7 @@
           ref="referal_battlefield"
           :blockPicking="true"
           :drawFieldsPickedByPlayer="myPickedFields"
+          :textToDisplayAbove="'Your Placment:'"
         ></BattlefieldMap>
       </div>
     </div>
@@ -37,6 +39,7 @@
 import BattlefieldMap from "./BattlefieldMap.vue";
 import ShipyardComponent from "./ShipyardComponent.vue";
 import EndGameComponent from "./EndGameComponent.vue";
+
 import { io } from "socket.io-client";
 
 import Swal from "sweetalert2";
@@ -51,9 +54,7 @@ export default {
 
   data: function () {
     return {
-      playerName: "Oskar",
-      socket: null,
-      mySlotIndex: undefined,
+      playerName: null,
       myPickedFields: [],
       blockPicking: false,
       displayMainBoard: true,
@@ -62,20 +63,29 @@ export default {
       playerWon: false,
       isPreEndGame: true,
       showEndGameScreen: false,
+
+      mySlotIndex: undefined,
+      socket: undefined,
     };
   },
 
+  props: {},
+
   mounted: function () {
+    this.getPlayerName();
+
     this.socket = io("http://192.168.1.121:8082");
+
     this.socket.on("yourID", (id) => {
-      console.log(id);
+      // console.log("yourID:", id);
       this.mySlotIndex = id;
     });
+
     this.socket.on("opponentIsReady", function () {
       Swal.fire({
         toast: true,
-        position: "top-end",
-        title: "Opponent already placed ships",
+        position: "top",
+        title: "Opponent placed ships",
       });
     });
 
@@ -101,7 +111,7 @@ export default {
         toast: true,
         title: "Ship hit 🔥",
         showConfirmButton: false,
-        position: "top-right",
+        position: "top",
         timer: 1000,
       });
       if (data.shotHitBy === this.mySlotIndex) {
@@ -176,7 +186,12 @@ export default {
     });
 
     this.socket.on("connect", function () {
-      Swal.fire({ toast: true, text: "Connection established" });
+      // Swal.fire({
+      //   toast: true,
+      //   showConfirmButton: false,
+      //   text: "Connection established",
+      //   timer: 1000,
+      // });
     });
 
     this.socket.on("disconnect", function () {
@@ -200,6 +215,27 @@ export default {
       });
       this.socket.emit("allShipsPicked", shipsPickedData);
     },
+
+    getPlayerName: function () {
+      this.blockPicking = true;
+      Swal.fire({
+        toast: true,
+        input: "text",
+        text: "Enter Your name",
+        inputPlaceholder: "Here put your name",
+        position: "top",
+        showCloseButton: false,
+        showCancelButton: false,
+      }).then((result) => {
+        if (result.value) {
+          this.playerName = result.value;
+          // console.log(this.playerName);
+          this.blockPicking = false;
+        } else {
+          this.getPlayerName();
+        }
+      });
+    },
   },
 };
 </script>
@@ -215,8 +251,7 @@ export default {
 }
 
 .all-my-picked-fields {
-  /* background-color: red; */
-  width: 50%;
+  width: 25vh;
   margin: auto;
   display: flex;
   justify-content: center;
