@@ -22,6 +22,8 @@ import HomeMenu from "@/components/HomeMenu.vue";
 import ProperGame from "@/components/ProperGame.vue";
 import AboutAuthor from "@/components/AboutAuthor.vue";
 
+// import Swal from "sweetalert2";
+
 export default {
   name: "App",
   data: function () {
@@ -29,8 +31,14 @@ export default {
       isMomeMenuState: true,
       isGameState: false,
       isAboutAuthorState: false,
+
+      // sessionSlotIndex: undefined,
+      // socket: null,
     };
   },
+
+  mounted: function () {},
+
   components: {
     HomeMenu,
     ProperGame,
@@ -75,6 +83,11 @@ button {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 
   padding: 0;
   margin: 0;
