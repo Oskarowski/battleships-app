@@ -101,8 +101,9 @@ export default {
 
 <style>
 .battlefield-map {
-  height: 40vh;
+  height: 38vh;
 
+  margin-top: 0;
   margin-left: 1vw;
   margin-right: 1vw;
 
@@ -112,5 +113,10 @@ export default {
   display: grid;
   grid-template-rows: repeat(10, auto);
   grid-template-columns: repeat(10, auto);
+}
+
+p {
+  margin: none;
+  padding: 0;
 }
 </style>
