@@ -14,7 +14,8 @@
     v-if="isAboutAuthorState"
     @go-back-btn-clicked="goBackBtnClicked"
   ></AboutAuthor>
-  <ProperGame v-if="isGameState"> </ProperGame>
+  <ProperGame @back-to-menu="backToMenuClicked()" v-if="isGameState">
+  </ProperGame>
 </template>
 
 <script>
@@ -55,6 +56,14 @@ export default {
       this.isMomeMenuState = true;
       this.isAboutAuthorState = false;
       this.isGameState = false;
+    },
+
+    backToMenuClicked: function () {
+      console.log("App: backToMenuClicked");
+
+      this.isMomeMenuState = true;
+      this.isGameState = false;
+      this.isAboutAuthorState = false;
     },
   },
 };
