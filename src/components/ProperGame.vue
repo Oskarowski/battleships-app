@@ -1,7 +1,8 @@
 <template>
   <div class="game-container">
     <div v-if="isPreEndGame">
-      <label> {{ playerName }} </label>
+      <hr />
+      <label> {{ playerName }} VS {{ opponentName }} </label>
       <!-- <p>theGameIsOn: {{ theGameIsOn }}</p> -->
       <hr />
       <div class="all-fields-board">
@@ -30,7 +31,7 @@
       </div>
     </div>
     <div v-if="showEndGameScreen">
-      <EndGameComponent> </EndGameComponent>
+      <EndGameComponent @back-to-menu="backToMenuClicked()"> </EndGameComponent>
     </div>
   </div>
 </template>
@@ -45,6 +46,7 @@ import { io } from "socket.io-client";
 import Swal from "sweetalert2";
 
 export default {
+  emits: ["back-to-menu"],
   name: "ProperGame",
   components: {
     BattlefieldMap,
@@ -55,6 +57,7 @@ export default {
   data: function () {
     return {
       playerName: null,
+      opponentName: null,
       myPickedFields: [],
       blockPicking: false,
       displayMainBoard: true,
@@ -74,18 +77,26 @@ export default {
   mounted: function () {
     this.getPlayerName();
 
-    this.socket = io("http://192.168.1.121:8082");
+    this.socket = io("http://192.168.1.115:8082");
 
     this.socket.on("yourID", (id) => {
       // console.log("yourID:", id);
       this.mySlotIndex = id;
     });
 
-    this.socket.on("opponentIsReady", function () {
+    this.socket.on("setOpponentName", (recivedName) => {
+      console.log("setOpponentName recivedName:", recivedName);
+
+      this.$nextTick(() => {
+        this.opponentName = recivedName;
+      });
+    });
+
+    this.socket.on("opponentIsReady", () => {
       Swal.fire({
         toast: true,
         position: "top",
-        title: "Opponent placed ships",
+        title: `${this.opponentName} placed ships`,
       });
     });
 
@@ -138,9 +149,11 @@ export default {
     });
 
     this.socket.on("hitAndSunk", ({ hitBy, ship }) => {
+      //TODO: add heare switch to get a ship full name not just ID
+
       Swal.fire({
         title: "Ship sunk",
-        text: `Player ${hitBy} sunk opponents ${ship.id}`,
+        text: `${this.playerName} sunk ${this.opponentName} ${ship.id}`,
         showConfirmButton: false,
         timer: 1500,
       });
@@ -231,10 +244,16 @@ export default {
           this.playerName = result.value;
           // console.log(this.playerName);
           this.blockPicking = false;
+          this.socket.emit("setPlayerName", this.playerName);
         } else {
           this.getPlayerName();
         }
       });
+    },
+
+    backToMenuClicked: function () {
+      console.log("ProperGame: this.backToMenuClicked");
+      this.$emit("back-to-menu");
     },
   },
 };
@@ -267,8 +286,8 @@ export default {
 
 hr {
   display: block;
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
+  margin-top: 0.4vh;
+  margin-bottom: 0.4vh;
   margin-left: auto;
   margin-right: auto;
   border-style: inset;
