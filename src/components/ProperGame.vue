@@ -77,7 +77,7 @@ export default {
   mounted: function () {
     this.getPlayerName();
 
-    this.socket = io("http://192.168.1.115:8082");
+    this.socket = io("http://192.168.1.116:8082");
 
     this.socket.on("yourID", (id) => {
       // console.log("yourID:", id);
@@ -150,20 +150,23 @@ export default {
 
     this.socket.on("hitAndSunk", ({ hitBy, ship }) => {
       //TODO: add heare switch to get a ship full name not just ID
-
-      Swal.fire({
-        title: "Ship sunk",
-        text: `${this.playerName} sunk ${this.opponentName} ${ship.id}`,
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      var textToDisplayinAlert;
 
       ship.pickedNodes.forEach((node) => {
         if (hitBy === this.mySlotIndex) {
+          textToDisplayinAlert = `${this.playerName} sunk ${this.opponentName} ${ship.id}`;
           this.$refs.proper_battlefield.shipSunkByPlayer(node);
         } else if (hitBy !== undefined) {
+          textToDisplayinAlert = `${this.opponentName} sunk ${this.playerName} ${ship.id}`;
           this.$refs.referal_battlefield.shipSunkByPlayer(node);
         }
+      });
+
+      Swal.fire({
+        title: "Ship sunk",
+        text: textToDisplayinAlert,
+        showConfirmButton: false,
+        timer: 1500,
       });
     });
 
