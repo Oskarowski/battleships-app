@@ -14,7 +14,12 @@
     v-if="isAboutAuthorState"
     @go-back-btn-clicked="goBackBtnClicked"
   ></AboutAuthor>
-  <ProperGame @back-to-menu="backToMenuClicked()" v-if="isGameState">
+  <ProperGame
+    v-if="isGameState"
+    @back-to-menu="backToMenuClicked()"
+    :mySlotIndex="mySlotIndex"
+    :socket="socket"
+  >
   </ProperGame>
 </template>
 
@@ -23,6 +28,8 @@ import HomeMenu from "@/components/HomeMenu.vue";
 import ProperGame from "@/components/ProperGame.vue";
 import AboutAuthor from "@/components/AboutAuthor.vue";
 
+import { io } from "socket.io-client";
+
 export default {
   name: "App",
   data: function () {
@@ -30,12 +37,24 @@ export default {
       isMomeMenuState: true,
       isGameState: false,
       isAboutAuthorState: false,
+
+      mySlotIndex: undefined,
+      socket: undefined,
     };
   },
   components: {
     HomeMenu,
     ProperGame,
     AboutAuthor,
+  },
+
+  mounted: function () {
+    this.socket = io("http://192.168.1.116:8082");
+
+    this.socket.on("yourID", (id) => {
+      // console.log("yourID:", id);
+      this.mySlotIndex = id;
+    });
   },
 
   methods: {

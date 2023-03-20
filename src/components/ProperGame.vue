@@ -41,8 +41,6 @@ import BattlefieldMap from "./BattlefieldMap.vue";
 import ShipyardComponent from "./ShipyardComponent.vue";
 import EndGameComponent from "./EndGameComponent.vue";
 
-import { io } from "socket.io-client";
-
 import Swal from "sweetalert2";
 
 export default {
@@ -67,23 +65,17 @@ export default {
       isPreEndGame: true,
       showEndGameScreen: false,
 
-      mySlotIndex: undefined,
-      socket: undefined,
+      // mySlotIndex: undefined,
+      // socket: undefined,
     };
   },
 
-  props: {},
+  props: {
+    mySlotIndex: undefined,
+    socket: undefined,
+  },
 
   mounted: function () {
-    this.getPlayerName();
-
-    this.socket = io("http://192.168.1.116:8082");
-
-    this.socket.on("yourID", (id) => {
-      // console.log("yourID:", id);
-      this.mySlotIndex = id;
-    });
-
     this.socket.on("setOpponentName", (recivedName) => {
       console.log("setOpponentName recivedName:", recivedName);
 
@@ -99,6 +91,8 @@ export default {
         title: `${this.opponentName} placed ships`,
       });
     });
+
+    this.getPlayerName();
 
     this.socket.on("blockClickingOnBoard", () => {
       this.blockPicking = true;
