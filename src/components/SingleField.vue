@@ -66,6 +66,8 @@ export default {
   border: 1px solid black;
   box-sizing: border-box;
   text-align: center;
+
+  transition: background-color 1s ease;
 }
 .field-marked {
   background-color: aquamarine;
@@ -74,6 +76,13 @@ export default {
   background-color: rgb(148, 0, 0);
 }
 
+.field-missed {
+  background-color: gray;
+}
+
+.field-sunk {
+  background-color: black;
+}
 @media (hover: hover) and (pointer: fine) {
   button:not(:disabled):hover {
     opacity: 0.9;
@@ -81,12 +90,5 @@ export default {
     border-color: bisque;
     transition: opacity 0.2s, background-color 0.2s;
   }
-}
-.field-missed {
-  background-color: gray;
-}
-
-.field-sunk {
-  background-color: black;
 }
 </style>
