@@ -16,9 +16,11 @@
   ></AboutAuthor>
   <ProperGame
     v-if="isGameState"
+    ref="rGameComponent"
     @back-to-menu="backToMenuClicked()"
     :mySlotIndex="mySlotIndex"
     :socket="socket"
+    :opponentNameApp="opponentName"
   >
   </ProperGame>
 </template>
@@ -40,6 +42,7 @@ export default {
 
       mySlotIndex: undefined,
       socket: undefined,
+      opponentName: null,
     };
   },
   components: {
@@ -49,11 +52,19 @@ export default {
   },
 
   mounted: function () {
-    this.socket = io("http://192.168.1.116:8082");
+    this.socket = io("http://192.168.1.122:8082");
+    //http://192.168.1.119:8082
 
     this.socket.on("yourID", (id) => {
       // console.log("yourID:", id);
       this.mySlotIndex = id;
+    });
+
+    this.socket.on("setOpponentName", (recivedName) => {
+      this.opponentName = recivedName;
+      if (this.isGameState === true) {
+        this.$refs.rGameComponent.refreshPlayersNamesOnTop(recivedName);
+      }
     });
   },
 
@@ -78,8 +89,8 @@ export default {
     },
 
     backToMenuClicked: function () {
-      console.log("App: backToMenuClicked");
-
+      // console.log("App: backToMenuClicked");
+      // this.socket.emit("resetPickedShips");
       this.isMomeMenuState = true;
       this.isGameState = false;
       this.isAboutAuthorState = false;
