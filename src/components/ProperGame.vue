@@ -64,26 +64,16 @@ export default {
       playerWon: false,
       isPreEndGame: true,
       showEndGameScreen: false,
-
-      // mySlotIndex: undefined,
-      // socket: undefined,
     };
   },
 
   props: {
+    opponentNameApp: undefined,
     mySlotIndex: undefined,
     socket: undefined,
   },
 
   mounted: function () {
-    this.socket.on("setOpponentName", (recivedName) => {
-      console.log("setOpponentName recivedName:", recivedName);
-
-      this.$nextTick(() => {
-        this.opponentName = recivedName;
-      });
-    });
-
     this.socket.on("opponentIsReady", () => {
       Swal.fire({
         toast: true,
@@ -91,6 +81,8 @@ export default {
         title: `${this.opponentName} placed ships`,
       });
     });
+
+    // this.assignNames();
 
     this.getPlayerName();
 
@@ -242,6 +234,9 @@ export default {
           // console.log(this.playerName);
           this.blockPicking = false;
           this.socket.emit("setPlayerName", this.playerName);
+          if (this.opponentNameApp !== undefined) {
+            this.refreshPlayersNamesOnTop(this.opponentNameApp);
+          }
         } else {
           this.getPlayerName();
         }
@@ -249,8 +244,14 @@ export default {
     },
 
     backToMenuClicked: function () {
-      console.log("ProperGame: this.backToMenuClicked");
       this.$emit("back-to-menu");
+    },
+
+    refreshPlayersNamesOnTop: function (recivedName) {
+      this.opponentName = recivedName;
+      this.$nextTick(() => {
+        this.opponentName = recivedName;
+      });
     },
   },
 };
