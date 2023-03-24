@@ -52,7 +52,7 @@ export default {
   },
 
   mounted: function () {
-    this.socket = io("http://192.168.1.122:8082");
+    this.socket = io("http://192.168.1.111:8082");
     //http://192.168.1.119:8082
 
     this.socket.on("yourID", (id) => {
