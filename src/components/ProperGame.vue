@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <div v-if="isPreEndGame">
+    <div v-if="isGameOn">
       <hr />
       <label> {{ playerName }} VS {{ opponentName }} </label>
       <!-- <p>theGameIsOn: {{ theGameIsOn }}</p> -->
@@ -62,7 +62,7 @@ export default {
       theGameIsOn: false,
       playerLost: false,
       playerWon: false,
-      isPreEndGame: true,
+      isGameOn: true,
       showEndGameScreen: false,
     };
   },
@@ -112,7 +112,9 @@ export default {
         timer: 1000,
       });
       if (data.shotHitBy === this.mySlotIndex) {
-        this.$refs.proper_battlefield.fieldHitByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.proper_battlefield.fieldHitByPlayer(fieldElement);
+        });
       } else if (data.shotHitBy !== undefined) {
         this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
       }
@@ -128,7 +130,9 @@ export default {
       });
 
       if (missedBy === this.mySlotIndex) {
-        this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
+        });
       } else if (missedBy !== undefined) {
         this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
       }
@@ -141,7 +145,9 @@ export default {
       ship.pickedNodes.forEach((node) => {
         if (hitBy === this.mySlotIndex) {
           textToDisplayinAlert = `${this.playerName} sunk ${this.opponentName} ${ship.id}`;
-          this.$refs.proper_battlefield.shipSunkByPlayer(node);
+          this.$nextTick(() => {
+            this.$refs.proper_battlefield.shipSunkByPlayer(node);
+          });
         } else if (hitBy !== undefined) {
           textToDisplayinAlert = `${this.opponentName} sunk ${this.playerName} ${ship.id}`;
           this.$refs.referal_battlefield.shipSunkByPlayer(node);
@@ -163,8 +169,11 @@ export default {
         timer: 1500,
       });
       this.blockPicking = true;
-      this.isPreEndGame = false;
+      this.isGameOn = false;
       this.showEndGameScreen = true;
+      this.displayMainBoard = false;
+      this.theGameIsOn = false;
+      this.socket.emit("theGameIsOver", true);
     });
 
     this.socket.on("youWin", () => {
@@ -240,6 +249,13 @@ export default {
         } else {
           this.getPlayerName();
         }
+      });
+    },
+
+    getMainBoardRef: function () {},
+    getRefBoardRef: function () {
+      this.$nextTick(() => {
+        return this.$refs.referal_battlefield;
       });
     },
 
