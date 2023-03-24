@@ -37,7 +37,7 @@ export default {
     textToDisplayAbove: null,
   },
 
-  mounted() {
+  mounted: function () {
     // console.log(this.drawFieldsPickedByPlayer);
 
     this.generateAllMapFields();
