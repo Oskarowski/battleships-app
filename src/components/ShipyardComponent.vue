@@ -21,8 +21,10 @@ export default {
       markedFields: null,
       allShips: [
         { id: 1, shipName: "destroyer", length: 2, state: "free" },
-        { id: 2, shipName: "submarine", length: 3, state: "free" },
-        { id: 3, shipName: "carrier", length: 5, state: "free" },
+        // { id: 2, shipName: "submarine", length: 3, state: "free" },
+        // { id: 3, shipName: "carrier", length: 5, state: "free" },
+        // { id: 4, shipName: "battleship", length: 4, state: "free" },
+        // { id: 5, shipName: "cruiser", length: 3, state: "free" },
       ],
     };
   },
