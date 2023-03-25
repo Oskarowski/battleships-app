@@ -70,18 +70,18 @@ export default {
   transition: background-color 1s ease;
 }
 .field-marked {
-  background-color: aquamarine;
+  background-color: rgb(0, 87, 114);
 }
 .field-hit {
-  background-color: rgb(148, 0, 0);
+  background-color: rgb(98, 0, 0);
 }
 
 .field-missed {
-  background-color: gray;
+  background-color: rgb(159, 159, 159);
 }
 
 .field-sunk {
-  background-color: black;
+  background-color: rgb(0, 0, 56);
 }
 @media (hover: hover) and (pointer: fine) {
   button:not(:disabled):hover {
