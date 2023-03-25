@@ -114,9 +114,11 @@ export default {
       if (data.shotHitBy === this.mySlotIndex) {
         this.$nextTick(() => {
           this.$refs.proper_battlefield.fieldHitByPlayer(fieldElement);
-        });
+        }).catch(function () {});
       } else if (data.shotHitBy !== undefined) {
-        this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
+        }).catch(function () {});
       }
     });
 
@@ -132,9 +134,11 @@ export default {
       if (missedBy === this.mySlotIndex) {
         this.$nextTick(() => {
           this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
-        });
+        }).catch(function () {});
       } else if (missedBy !== undefined) {
-        this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
+        }).catch(function () {});
       }
     });
 
@@ -147,10 +151,12 @@ export default {
           textToDisplayinAlert = `${this.playerName} sunk ${this.opponentName} ${ship.id}`;
           this.$nextTick(() => {
             this.$refs.proper_battlefield.shipSunkByPlayer(node);
-          });
+          }).catch(function () {});
         } else if (hitBy !== undefined) {
           textToDisplayinAlert = `${this.opponentName} sunk ${this.playerName} ${ship.id}`;
-          this.$refs.referal_battlefield.shipSunkByPlayer(node);
+          this.$nextTick(() => {
+            this.$refs.referal_battlefield.shipSunkByPlayer(node);
+          }).catch(function () {});
         }
       });
 
