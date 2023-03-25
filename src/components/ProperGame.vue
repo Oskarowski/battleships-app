@@ -155,10 +155,16 @@ export default {
         } else if (hitBy !== undefined) {
           textToDisplayinAlert = `${this.opponentName} sunk ${this.playerName} ${ship.id}`;
           this.$nextTick(() => {
-            this.$refs.referal_battlefield.shipSunkByPlayer(node);
+            this.$refs.referal_battlefield.shipSunkByPlayer(ship.id);
           }).catch(function () {});
         }
       });
+
+      if (hitBy === this.mySlotIndex) {
+        this.$nextTick(() => {
+          this.$refs.shipyardComponent.markThatOpponentsShipSunk(ship);
+        }).catch(function () {});
+      }
 
       Swal.fire({
         title: "Ship sunk",
