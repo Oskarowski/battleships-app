@@ -1,6 +1,6 @@
 <template>
   <button
-    :disabled="isFieldBlocked"
+    :disabled="isFieldNotPickable"
     v-on:click="fieldClicked()"
     :class="{
       'single-field': true,
@@ -21,6 +21,7 @@ export default {
     return {
       fieldID: v4(),
       isMarked: false,
+      isFieldNotPickable: false,
     };
   },
   props: {
@@ -46,6 +47,14 @@ export default {
         fieldRow: this.fieldElement.fieldRow,
         fieldColumn: this.fieldElement.fieldColumn,
       });
+    },
+
+    blockFieldFromPicking: function () {
+      this.isFieldNotPickable = true;
+    },
+
+    printMessage: function () {
+      console.log("SingleField");
     },
   },
 };
