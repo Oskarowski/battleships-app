@@ -17,6 +17,7 @@
       <hr />
       <ShipyardComponent
         ref="shipyardComponent"
+        @ship-picked="individualShipPicked($event)"
         v-on:all-ships-picked="allShipsPicked($event)"
       ></ShipyardComponent>
       <hr />
@@ -237,6 +238,12 @@ export default {
         this.myPickedFields.push(...ship.pickedNodes);
       });
       this.socket.emit("allShipsPicked", shipsPickedData);
+    },
+
+    individualShipPicked: function (shipArray) {
+      this.$nextTick(() => {
+        this.$refs.proper_battlefield.blockIndividualNodes(shipArray);
+      }).catch(function () {});
     },
 
     getPlayerName: function () {
