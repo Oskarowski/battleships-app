@@ -11,6 +11,7 @@
         :isFieldHit="field.isFieldHit"
         :isFieldSunk="field.isFieldSunk"
         :isFieldBlocked="blockPicking"
+        ref="map_fields"
       ></SingleField>
     </div>
   </div>
@@ -94,6 +95,20 @@ export default {
           cell.fieldRow == fieldElement.fieldRow &&
           cell.fieldColumn == fieldElement.fieldColumn
       ).isFieldSunk = true;
+    },
+
+    blockIndividualNodes: function (pickedNodesData) {
+      pickedNodesData.forEach((node) => {
+        this.$nextTick(() => {
+          this.$refs.map_fields
+            .find(
+              (cell) =>
+                cell.fieldElement.fieldRow == node.fieldRow &&
+                cell.fieldElement.fieldColumn == node.fieldColumn
+            )
+            .blockFieldFromPicking();
+        }).catch(function () {});
+      });
     },
   },
 };
