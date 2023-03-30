@@ -36,6 +36,7 @@ export default {
     if (this.fieldElement.isMarked) {
       this.isMarked = true;
     }
+    if (this.isFieldBlocked) this.isFieldNotPickable = true;
   },
 
   methods: {
@@ -55,6 +56,19 @@ export default {
 
     printMessage: function () {
       console.log("SingleField");
+    },
+  },
+
+  watch: {
+    isFieldBlocked(newValue, oldValue) {
+      console.log(
+        "watch isFieldBlocked newValue:",
+        newValue,
+        " oldValue:",
+        oldValue
+      );
+      if (newValue === true) this.isFieldNotPickable = true;
+      else if (newValue === false) this.isFieldNotPickable = false;
     },
   },
 };
