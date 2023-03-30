@@ -61,12 +61,6 @@ export default {
 
   watch: {
     isFieldBlocked(newValue, oldValue) {
-      console.log(
-        "watch isFieldBlocked newValue:",
-        newValue,
-        " oldValue:",
-        oldValue
-      );
       if (newValue === true) this.isFieldNotPickable = true;
       else if (newValue === false) this.isFieldNotPickable = false;
     },
