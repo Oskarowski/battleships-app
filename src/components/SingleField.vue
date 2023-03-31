@@ -60,7 +60,8 @@ export default {
   },
 
   watch: {
-    isFieldBlocked(newValue, oldValue) {
+    isFieldBlocked(newValue) {
+      //oldValue
       if (newValue === true) this.isFieldNotPickable = true;
       else if (newValue === false) this.isFieldNotPickable = false;
     },
