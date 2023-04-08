@@ -53,10 +53,8 @@ export default {
 
   mounted: function () {
     this.socket = io("https://battleship-app-server.onrender.com");
-    //http://192.168.1.119:8082
 
     this.socket.on("yourID", (id) => {
-      // console.log("yourID:", id);
       this.mySlotIndex = id;
     });
 
@@ -70,27 +68,22 @@ export default {
 
   methods: {
     playBtnClicked: function () {
-      // console.log("APP: playBtnClicked");
       this.isMomeMenuState = false;
       this.isAboutAuthorState = false;
       this.isGameState = true;
     },
     authorBtnClicked: function () {
-      // console.log("APP: authorBtnClicked");
       this.isMomeMenuState = false;
       this.isAboutAuthorState = true;
       this.isGameState = false;
     },
     goBackBtnClicked: function () {
-      // console.log("APP: goBackBtnClicked");
       this.isMomeMenuState = true;
       this.isAboutAuthorState = false;
       this.isGameState = false;
     },
 
     backToMenuClicked: function () {
-      // console.log("App: backToMenuClicked");
-      // this.socket.emit("resetPickedShips");
       this.isMomeMenuState = true;
       this.isGameState = false;
       this.isAboutAuthorState = false;
