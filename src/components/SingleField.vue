@@ -1,6 +1,6 @@
 <template>
   <button
-    :disabled="isFieldBlocked"
+    :disabled="isFieldNotPickable"
     v-on:click="fieldClicked()"
     :class="{
       'single-field': true,
@@ -21,6 +21,7 @@ export default {
     return {
       fieldID: v4(),
       isMarked: false,
+      isFieldNotPickable: false,
     };
   },
   props: {
@@ -35,6 +36,7 @@ export default {
     if (this.fieldElement.isMarked) {
       this.isMarked = true;
     }
+    if (this.isFieldBlocked) this.isFieldNotPickable = true;
   },
 
   methods: {
@@ -46,6 +48,22 @@ export default {
         fieldRow: this.fieldElement.fieldRow,
         fieldColumn: this.fieldElement.fieldColumn,
       });
+    },
+
+    blockFieldFromPicking: function () {
+      this.isFieldNotPickable = true;
+    },
+
+    printMessage: function () {
+      console.log("SingleField");
+    },
+  },
+
+  watch: {
+    isFieldBlocked(newValue) {
+      //oldValue
+      if (newValue === true) this.isFieldNotPickable = true;
+      else if (newValue === false) this.isFieldNotPickable = false;
     },
   },
 };
@@ -70,18 +88,18 @@ export default {
   transition: background-color 1s ease;
 }
 .field-marked {
-  background-color: aquamarine;
+  background-color: rgb(0, 87, 114);
 }
 .field-hit {
-  background-color: rgb(148, 0, 0);
+  background-color: rgb(98, 0, 0);
 }
 
 .field-missed {
-  background-color: gray;
+  background-color: rgb(159, 159, 159);
 }
 
 .field-sunk {
-  background-color: black;
+  background-color: rgb(0, 0, 56);
 }
 @media (hover: hover) and (pointer: fine) {
   button:not(:disabled):hover {

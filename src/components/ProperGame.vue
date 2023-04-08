@@ -1,6 +1,6 @@
 <template>
   <div class="game-container">
-    <div v-if="isPreEndGame">
+    <div v-if="isGameOn">
       <hr />
       <label> {{ playerName }} VS {{ opponentName }} </label>
       <!-- <p>theGameIsOn: {{ theGameIsOn }}</p> -->
@@ -17,6 +17,7 @@
       <hr />
       <ShipyardComponent
         ref="shipyardComponent"
+        @ship-picked="individualShipPicked($event)"
         v-on:all-ships-picked="allShipsPicked($event)"
       ></ShipyardComponent>
       <hr />
@@ -62,7 +63,7 @@ export default {
       theGameIsOn: false,
       playerLost: false,
       playerWon: false,
-      isPreEndGame: true,
+      isGameOn: true,
       showEndGameScreen: false,
     };
   },
@@ -112,9 +113,13 @@ export default {
         timer: 1000,
       });
       if (data.shotHitBy === this.mySlotIndex) {
-        this.$refs.proper_battlefield.fieldHitByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.proper_battlefield.fieldHitByPlayer(fieldElement);
+        }).catch(function () {});
       } else if (data.shotHitBy !== undefined) {
-        this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.referal_battlefield.fieldHitByPlayer(fieldElement);
+        }).catch(function () {});
       }
     });
 
@@ -128,9 +133,13 @@ export default {
       });
 
       if (missedBy === this.mySlotIndex) {
-        this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.proper_battlefield.shotMissedByPlayer(fieldElement);
+        }).catch(function () {});
       } else if (missedBy !== undefined) {
-        this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
+        this.$nextTick(() => {
+          this.$refs.referal_battlefield.shotMissedByPlayer(fieldElement);
+        }).catch(function () {});
       }
     });
 
@@ -141,12 +150,22 @@ export default {
       ship.pickedNodes.forEach((node) => {
         if (hitBy === this.mySlotIndex) {
           textToDisplayinAlert = `${this.playerName} sunk ${this.opponentName} ${ship.id}`;
-          this.$refs.proper_battlefield.shipSunkByPlayer(node);
+          this.$nextTick(() => {
+            this.$refs.proper_battlefield.shipSunkByPlayer(node);
+          }).catch(function () {});
         } else if (hitBy !== undefined) {
           textToDisplayinAlert = `${this.opponentName} sunk ${this.playerName} ${ship.id}`;
-          this.$refs.referal_battlefield.shipSunkByPlayer(node);
+          this.$nextTick(() => {
+            this.$refs.referal_battlefield.shipSunkByPlayer(ship.id);
+          }).catch(function () {});
         }
       });
+
+      if (hitBy === this.mySlotIndex) {
+        this.$nextTick(() => {
+          this.$refs.shipyardComponent.markThatOpponentsShipSunk(ship);
+        }).catch(function () {});
+      }
 
       Swal.fire({
         title: "Ship sunk",
@@ -163,8 +182,11 @@ export default {
         timer: 1500,
       });
       this.blockPicking = true;
-      this.isPreEndGame = false;
+      this.isGameOn = false;
       this.showEndGameScreen = true;
+      this.displayMainBoard = false;
+      this.theGameIsOn = false;
+      this.socket.emit("theGameIsOver", true);
     });
 
     this.socket.on("youWin", () => {
@@ -218,6 +240,12 @@ export default {
       this.socket.emit("allShipsPicked", shipsPickedData);
     },
 
+    individualShipPicked: function (shipArray) {
+      this.$nextTick(() => {
+        this.$refs.proper_battlefield.blockIndividualNodes(shipArray);
+      }).catch(function () {});
+    },
+
     getPlayerName: function () {
       this.blockPicking = true;
       Swal.fire({
@@ -240,6 +268,13 @@ export default {
         } else {
           this.getPlayerName();
         }
+      });
+    },
+
+    getMainBoardRef: function () {},
+    getRefBoardRef: function () {
+      this.$nextTick(() => {
+        return this.$refs.referal_battlefield;
       });
     },
 

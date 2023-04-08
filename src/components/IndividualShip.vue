@@ -31,6 +31,9 @@ export default {
       if (this.individualShip.state == "alreadyPickedShip") {
         shipClasses += "alreadyPickedShip";
       }
+      if (this.individualShip.state == "sunkShip") {
+        shipClasses += "sunkShip";
+      }
 
       return shipClasses;
     },
@@ -46,6 +49,9 @@ export default {
   height: 1em;
   aspect-ratio: 1 / 1;
   display: inline-block;
+}
+.sunkShip {
+  background-color: rgb(0, 0, 56);
 }
 .currentlyPickedShip {
   background-color: yellowgreen;
