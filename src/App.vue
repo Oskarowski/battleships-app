@@ -52,7 +52,7 @@ export default {
   },
 
   mounted: function () {
-    this.socket = io("http://192.168.1.122:8082");
+    this.socket = io("https://battleship-app-server.onrender.com");
     //http://192.168.1.119:8082
 
     this.socket.on("yourID", (id) => {
