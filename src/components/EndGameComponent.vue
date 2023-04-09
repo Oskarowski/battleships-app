@@ -10,7 +10,6 @@ export default {
   emits: ["back-to-menu"],
   methods: {
     backToMenu: function () {
-      console.log("EndGameComp: this.backToMenu");
       this.$emit("back-to-menu");
     },
   },

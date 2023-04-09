@@ -53,15 +53,10 @@ export default {
     blockFieldFromPicking: function () {
       this.isFieldNotPickable = true;
     },
-
-    printMessage: function () {
-      console.log("SingleField");
-    },
   },
 
   watch: {
     isFieldBlocked(newValue) {
-      //oldValue
       if (newValue === true) this.isFieldNotPickable = true;
       else if (newValue === false) this.isFieldNotPickable = false;
     },
@@ -85,7 +80,7 @@ export default {
   box-sizing: border-box;
   text-align: center;
 
-  transition: background-color 1s ease;
+  transition: background-color 0.7s ease;
 }
 .field-marked {
   background-color: rgb(0, 87, 114);

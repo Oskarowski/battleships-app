@@ -39,8 +39,6 @@ export default {
   },
 
   mounted: function () {
-    // console.log(this.drawFieldsPickedByPlayer);
-
     this.generateAllMapFields();
   },
 
@@ -73,7 +71,6 @@ export default {
     },
 
     fieldHitByPlayer: function (fieldElement) {
-      // console.log(fieldElement);
       this.allFieldsCollection.find(
         (cell) =>
           cell.fieldRow == fieldElement.fieldRow &&

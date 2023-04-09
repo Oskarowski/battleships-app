@@ -23,8 +23,8 @@ export default {
         { id: 1, shipName: "destroyer", length: 2, state: "free" },
         { id: 2, shipName: "submarine", length: 3, state: "free" },
         { id: 3, shipName: "carrier", length: 5, state: "free" },
-        // { id: 4, shipName: "battleship", length: 4, state: "free" },
-        // { id: 5, shipName: "cruiser", length: 3, state: "free" },
+        { id: 4, shipName: "battleship", length: 4, state: "free" },
+        { id: 5, shipName: "cruiser", length: 3, state: "free" },
       ],
     };
   },
@@ -70,7 +70,6 @@ export default {
         return this.$emit("all-ships-picked", this.allShips);
       }
       if (currentShip.length == shipArray.length) {
-        // console.log(shipArray);
         this.$emit("ship-picked", shipArray);
         currentShip.state = "alreadyPickedShip";
         currentShip.pickedNodes = shipArray;

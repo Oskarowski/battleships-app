@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{ this.shipName }}
+    <!-- {{ this.shipName }} -->
     <div
       :class="whichShipClassesToApply"
       v-bind:key="singleShipNode"

@@ -27,7 +27,7 @@
           ref="referal_battlefield"
           :blockPicking="true"
           :drawFieldsPickedByPlayer="myPickedFields"
-          :textToDisplayAbove="'Your Placment:'"
+          :textToDisplayAbove="'Your Placement:'"
         ></BattlefieldMap>
       </div>
     </div>
@@ -82,8 +82,6 @@ export default {
         title: `${this.opponentName} placed ships`,
       });
     });
-
-    // this.assignNames();
 
     this.getPlayerName();
 
@@ -182,10 +180,13 @@ export default {
         timer: 1500,
       });
       this.blockPicking = true;
-      this.isGameOn = false;
-      this.showEndGameScreen = true;
-      this.displayMainBoard = false;
-      this.theGameIsOn = false;
+      this.$nextTick(() => {
+        this.isGameOn = false;
+        this.theGameIsOn = false;
+        this.displayMainBoard = false;
+        this.showEndGameScreen = true;
+      });
+
       this.socket.emit("theGameIsOver", true);
     });
 
@@ -218,16 +219,13 @@ export default {
       // });
     });
 
-    this.socket.on("disconnect", function () {
-      console.log("Disconnected from server");
-    });
+    this.socket.on("disconnect", function () {});
   },
 
   methods: {
     fieldClicked: function (fieldElement) {
       if (this.theGameIsOn) {
         this.socket.emit("shotFired", { fieldElement: fieldElement });
-        console.log("Shot fired");
       } else {
         this.socket.emit("fieldClicked", fieldElement);
         this.$refs.shipyardComponent.fieldClicked(fieldElement);
@@ -259,7 +257,6 @@ export default {
       }).then((result) => {
         if (result.value) {
           this.playerName = result.value;
-          // console.log(this.playerName);
           this.blockPicking = false;
           this.socket.emit("setPlayerName", this.playerName);
           if (this.opponentNameApp !== undefined) {
