@@ -1,5 +1,7 @@
 # battleships-app
 
+## You can play the game at this link: https://battleship-game-ihgc.onrender.com
+
 ## Project setup
 ```
 npm install
