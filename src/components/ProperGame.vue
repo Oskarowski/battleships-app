@@ -235,6 +235,7 @@ export default {
       shipsPickedData.forEach((ship) => {
         this.myPickedFields.push(...ship.pickedNodes);
       });
+      this.blockPicking = true;
       this.socket.emit("allShipsPicked", shipsPickedData);
     },
 
@@ -249,8 +250,8 @@ export default {
       Swal.fire({
         toast: true,
         input: "text",
-        text: "Enter Your name",
-        inputPlaceholder: "Here put your name",
+        text: "Enter Your nick",
+        inputPlaceholder: "Here put your nick",
         position: "top",
         showCloseButton: false,
         showCancelButton: false,
