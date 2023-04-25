@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "xyz.appmaker.dbsqly",
+      "sha256_cert_fingerprints": [
+        "B7:8C:9D:8D:07:D0:41:57:A7:FD:97:A8:A9:9C:BD:89:BE:58:9A:EE:65:0C:4C:3D:25:32:17:8B:90:E9:BB:57"
+      ]
+    }
+  }
+]
