@@ -31,6 +31,7 @@ import ProperGame from "@/components/ProperGame.vue";
 import AboutAuthor from "@/components/AboutAuthor.vue";
 
 import { io } from "socket.io-client";
+import Swal from "sweetalert2";
 
 export default {
   name: "App",
@@ -68,9 +69,23 @@ export default {
 
   methods: {
     playBtnClicked: function () {
+      this.socket.emit(
+        "playBtnClicked",
+        "Checking for opponent in room",
+        (isThereOpponentInRoom) => {
+          if (isThereOpponentInRoom === true) {
       this.isMomeMenuState = false;
       this.isAboutAuthorState = false;
       this.isGameState = true;
+          } else {
+            Swal.fire({
+              title: "No players available",
+              text: "Sorry, there are no players available to play with.",
+              icon: "warning",
+            });
+          }
+        }
+      );
     },
     authorBtnClicked: function () {
       this.isMomeMenuState = false;
