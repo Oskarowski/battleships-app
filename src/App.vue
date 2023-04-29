@@ -53,7 +53,7 @@ export default {
   },
 
   mounted: function () {
-    this.socket = io("https://battleship-app-server.onrender.com");
+    this.socket = io("http://192.168.1.115:8082/");
 
     this.socket.on("yourID", (id) => {
       this.mySlotIndex = id;
@@ -69,23 +69,56 @@ export default {
 
   methods: {
     playBtnClicked: function () {
-      this.socket.emit(
-        "playBtnClicked",
-        "Checking for opponent in room",
-        (isThereOpponentInRoom) => {
-          if (isThereOpponentInRoom === true) {
-      this.isMomeMenuState = false;
-      this.isAboutAuthorState = false;
-      this.isGameState = true;
-          } else {
-            Swal.fire({
-              title: "No players available",
-              text: "Sorry, there are no players available to play with.",
-              icon: "warning",
-            });
+      if (this.socket.connected) {
+        this.socket.emit(
+          "playBtnClicked",
+          "Checking for opponent in room",
+          (isThereOpponentInRoom) => {
+            if (isThereOpponentInRoom === true) {
+              this.isMomeMenuState = false;
+              this.isAboutAuthorState = false;
+              this.isGameState = true;
+            } else {
+              Swal.fire({
+                title: "No players available",
+                text: "Sorry, there are no players available to play with.",
+                icon: "warning",
+              });
+            }
           }
-        }
-      );
+        );
+      } else {
+        console.log("mySlotIndex", this.mySlotIndex);
+        Swal.fire({
+          title: "Connecting...",
+          html: "Please wait...",
+          allowEscapeKey: false,
+          allowOutsideClick: false,
+          showConfirmButton: false,
+          didOpen: () => {
+            Swal.showLoading();
+            if (this.socket.connected) {
+              Swal.close();
+              Swal({
+                title: "Connected",
+                icon: "success",
+                buttons: false,
+              });
+            } else {
+              Swal.fire({
+                title: "Falied connection",
+                icon: "error",
+                allowEscapeKey: false,
+                allowOutsideClick: false,
+                showConfirmButton: false,
+              });
+              setTimeout(function () {
+                Swal.close();
+              }, 2000);
+            }
+          },
+        });
+      }
     },
     authorBtnClicked: function () {
       this.isMomeMenuState = false;
