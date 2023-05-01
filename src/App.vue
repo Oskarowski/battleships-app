@@ -65,6 +65,22 @@ export default {
         this.$refs.rGameComponent.refreshPlayersNamesOnTop(recivedName);
       }
     });
+
+    this.socket.on("opponentDisconnected", function () {
+      if (this.isGameState === false) {
+        return;
+      }
+      Swal.fire({
+        toast: true,
+        showConfirmButton: true,
+        title: "Opponent Disconnected ☠",
+        timer: 3000,
+      });
+
+      this.backToMenuClicked();
+
+      console.log("Opponent Disconnected ☠");
+    });
   },
 
   methods: {
